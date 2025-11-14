@@ -1,0 +1,868 @@
+{
+    "student_name": "Genasnewdar None",
+    "test_title": "Элсэлтийн ерөнхий шалгалт-2023 Англи хэл B",
+    "score": 7.0,
+    "maximum_score": 91,
+    "time_taken_minutes": 120.14,
+    "sections": [
+        {
+            "section_name": "GRAMMAR",
+            "questions": [
+                [
+                    "MULTIPLE_CHOICE",
+                    "____Sahara is in the northern part of _____ Africa.",
+                    1,
+                    [
+                        "The / ___",
+                        "___ / the",
+                        "A/an",
+                        "The / the",
+                        "The / an"
+                    ],
+                    "The / ___",
+                    "The / ___"
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "Alice: Do you think about the future?\nJohn: No. Very ____ people care for what the future will be like.",
+                    1,
+                    [
+                        "a few",
+                        "much",
+                        "little",
+                        "few",
+                        "many"
+                    ],
+                    "few",
+                    "few"
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "There was ____ in the cinema other than us.",
+                    1,
+                    [
+                        "anyone",
+                        "no one",
+                        "someone",
+                        "everyone",
+                        "each one"
+                    ],
+                    "no one",
+                    "no one"
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "____ I think about it, the less happy I feel.",
+                    1,
+                    [
+                        "Much more",
+                        "More",
+                        "Most",
+                        "Much",
+                        "The more"
+                    ],
+                    "The more",
+                    "The more"
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "In the city you can walk from point A to point B ____ than by car.",
+                    1,
+                    [
+                        "quickly",
+                        "more quickly",
+                        "quick",
+                        "quicker",
+                        "most quickly"
+                    ],
+                    "more quickly",
+                    "more quickly"
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "I parked the car ____ the trees; there was a charming, little cottage.",
+                    1,
+                    [
+                        "in",
+                        "between",
+                        "among",
+                        "along",
+                        "on"
+                    ],
+                    "among",
+                    "among"
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "Hard work is an essential key ____ success.",
+                    1,
+                    [
+                        "with",
+                        "for",
+                        "of",
+                        "to",
+                        "from"
+                    ],
+                    "to",
+                    "to"
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "By three o'clock the students ____ the test for two hours.",
+                    1,
+                    [
+                        "will have been sitting",
+                        "will sit",
+                        "will be doing",
+                        "is going to sit",
+                        "will have done"
+                    ],
+                    "will have been sitting",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "They ____ for two hours before they finally ____ their destination.",
+                    1,
+                    [
+                        "were driving / reached",
+                        "drove / reached",
+                        "had been driving / reached",
+                        "had driven / had reached",
+                        "drove / had reached"
+                    ],
+                    "had been driving / reached",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "Chloe's father promised her a car ____ she didn't pass her final exam.",
+                    1,
+                    [
+                        "despite",
+                        "even though",
+                        "because",
+                        "whereas",
+                        "so that"
+                    ],
+                    "even though",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "I still remember ____ absolutely terrified when I got lost in the Gobi.",
+                    1,
+                    [
+                        "was",
+                        "be",
+                        "to be",
+                        "being",
+                        "been"
+                    ],
+                    "being",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "By the time we arrived at the market, the best fruit ____",
+                    1,
+                    [
+                        "was being sold",
+                        "had sold",
+                        "sold",
+                        "was sold",
+                        "had been sold"
+                    ],
+                    "had been sold",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "\"Did you book a room for the holiday yesterday?\" she asked him.\nShe asked ____",
+                    1,
+                    [
+                        "If he had booked a room for the holiday the day before yesterday",
+                        "whether she booked a room for the holiday yesterday",
+                        "If had he booked a room for the holiday the day before yesterday",
+                        "did he book a room for the holiday the previous day",
+                        "had he booked a room for the holiday the day before yesterday"
+                    ],
+                    "had he booked a room for the holiday the day before yesterday",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "If I <u>would</u> <u>bought</u> a <u>second-hand</u> car, I <u>wouldn't</u> have taken <u>out</u> this big bank loan.",
+                    3,
+                    [
+                        "would",
+                        "bought",
+                        "second-hand",
+                        "wouldn't",
+                        "out"
+                    ],
+                    "would",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "Medical scientists have <u>already</u> put computer chips <u>directly into</u> the brain <u>helping</u> people <u>who</u> have <u>Parkinson's</u> disease.",
+                    3,
+                    [
+                        "already",
+                        "directly into",
+                        "helping",
+                        "who",
+                        "Parkinson's"
+                    ],
+                    "helping",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "<u>This</u> jacket is <u>too</u> expensive, <u>as</u> I <u>can't</u> <u>afford</u> it.",
+                    3,
+                    [
+                        "This",
+                        "too",
+                        "as",
+                        "can't",
+                        "afford"
+                    ],
+                    "as",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "I was looking for a job but nothing suitable turned ____ , so I booked a holiday.",
+                    2,
+                    [
+                        "on",
+                        "back",
+                        "in",
+                        "up",
+                        "down"
+                    ],
+                    "up",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "The suspect gave ____ his secret in order to get the reward offered.",
+                    2,
+                    [
+                        "off",
+                        "back",
+                        "away",
+                        "up",
+                        "over"
+                    ],
+                    "away",
+                    null
+                ]
+            ]
+        },
+        {
+            "section_name": "VOCABULARY",
+            "questions": [
+                [
+                    "MULTIPLE_CHOICE",
+                    "I've got great ____ on my assignment from the teacher who remarked how I could improve on it.",
+                    1,
+                    [
+                        "feedback",
+                        "portfolio",
+                        "debate",
+                        "grant",
+                        "finance"
+                    ],
+                    "feedback",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "Roads should have ____ a so that people can cross the road safely.",
+                    1,
+                    [
+                        "zebra crossing",
+                        "intersection",
+                        "dead end",
+                        "one-way street",
+                        "lane"
+                    ],
+                    "zebra crossing",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "The particles that make up plasmas have electric charges, so plasmas can ____ electricity.",
+                    1,
+                    [
+                        "dissolve",
+                        "attract",
+                        "affect",
+                        "insulate",
+                        "conduct"
+                    ],
+                    "conduct",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "When fossil fuels burn, different substances are ____ into the air.",
+                    1,
+                    [
+                        "supplied",
+                        "tapped",
+                        "trapped",
+                        "released",
+                        "accelerated"
+                    ],
+                    "released",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "In the tournament, Hannah ____ all her opponents and won the gold medal.",
+                    1,
+                    [
+                        "had",
+                        "gained",
+                        "beat",
+                        "granted",
+                        "rewarded"
+                    ],
+                    "beat",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "The cave of the Apocalypse in Greece is in the list of UNESCO world ____ sites.",
+                    1,
+                    [
+                        "legacy",
+                        "representation",
+                        "heritage",
+                        "tradition",
+                        "masterpiece"
+                    ],
+                    "heritage",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "I was working on my presentation and suddenly the screen ____ black.",
+                    1,
+                    [
+                        "crashed",
+                        "went",
+                        "installed",
+                        "loaded",
+                        "turned"
+                    ],
+                    "went",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "Anna: You must come and visit us some time. Don't keep putting it off.\nTom: Yes, I'll come and see you in the not too distant future.",
+                    1,
+                    [
+                        "demand",
+                        "promise",
+                        "offer",
+                        "prediction",
+                        "appointment"
+                    ],
+                    "promise",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "Alice: Would you like some black coffee?\nJack: I can't drink bitter coffee.",
+                    1,
+                    [
+                        "offer",
+                        "opinion",
+                        "refusal",
+                        "confusion",
+                        "excuse"
+                    ],
+                    "refusal",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "a valuable ______\na rich ______\na reliable _____",
+                    3,
+                    [
+                        "determination",
+                        "enthusiasm",
+                        "source",
+                        "guarantee",
+                        "extension"
+                    ],
+                    "source",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "____ tears \n ____ laughter \n ____ song",
+                    3,
+                    [
+                        "to let out",
+                        "to make",
+                        "to bump into",
+                        "to burst into",
+                        "to cry over"
+                    ],
+                    "to burst into",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "I struggle to speak for a long time and say 'Err' a lot when I ____",
+                    3,
+                    [
+                        "run out of ideas",
+                        "avoid pronouncing words",
+                        "find my spoken fluency",
+                        "provide feedback on the grammatical accuracy",
+                        "have a significant impact"
+                    ],
+                    "run out of ideas",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "Choose the most possible solution to <b>air pollution</b>.",
+                    3,
+                    [
+                        "temporary shelters",
+                        "dump sites",
+                        "organic products",
+                        "hybrid cars",
+                        "exhaust fumes"
+                    ],
+                    "hybrid cars",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "He was late and made up some <u>cock-and-bull story</u> about losing his car keys.",
+                    3,
+                    [
+                        "He was upset about being late.",
+                        "Other people thought he was true.",
+                        "He was involved in illegal activities.",
+                        "He told a story about animals.",
+                        "He told a fake story."
+                    ],
+                    "He told a fake story.",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "The police will arrest the suspect <u>by hook or by crook</u>.",
+                    3,
+                    [
+                        "They will investigate all offenders.",
+                        "They will use technological devices.",
+                        "They will mobilize all units.",
+                        "They will use any method possible.",
+                        "They will be on duty at check-points."
+                    ],
+                    "They will use any method possible.",
+                    null
+                ]
+            ]
+        },
+        {
+            "section_name": "COMMUNICATION",
+            "questions": [
+                [
+                    "MULTIPLE_CHOICE",
+                    "Bank manager: Is your company _____ money?\nCustomer: Yes. We are in profit, so we have a steady income.",
+                    1,
+                    [
+                        "taking",
+                        "getting",
+                        "making",
+                        "asking",
+                        "giving"
+                    ],
+                    "making",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "Son: Dad, will you lend me some money to buy a new drone?\nFather: Well, money is rather ____ at the moment. Ask your mother.",
+                    1,
+                    [
+                        "strong",
+                        "slim",
+                        "hard",
+                        "few",
+                        "tight"
+                    ],
+                    "tight",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "How far is it to Darkhan city? \n The most polite form: ______",
+                    2,
+                    [
+                        "Can you tell me how far is it to Darkhan city?",
+                        "Could you tell me how far is it to Darkhan city?",
+                        "Tell me, how far it to Darkhan city is?",
+                        "Could you tell me how far it is to Darkhan city?",
+                        "Tell me, how far it is to Darkhan city, please?"
+                    ],
+                    "Could you tell me how far it is to Darkhan city?",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "Alice: It's so difficult. Should I take the job or not?\nJohn: I know it's difficult. But you have to <u>decide</u> one way or the other.",
+                    3,
+                    [
+                        "make an effort",
+                        "make a habit",
+                        "make a decision",
+                        "make an excuse",
+                        "make a change"
+                    ],
+                    "make a decision",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "John: Ok, so that's it. Thank you for listening. I think we have a few minutes for some questions and feedback...?\nTutor: I thought it was really good.\nAnna: Yeah... I think...maybe, some animation on the slides might've been useful. What do you think?\nWhat does Anna mean?",
+                    3,
+                    [
+                        "It's a very serious presentation.",
+                        "Some slides should be removed.",
+                        "Suppose some more slides should be added.",
+                        "The slides should be livelier if they have visuals.",
+                        "The presentation needs some more examples."
+                    ],
+                    "The slides should be livelier if they have visuals.",
+                    null
+                ]
+            ]
+        },
+        {
+            "section_name": "READING",
+            "questions": [
+                [
+                    "MULTIPLE_CHOICE",
+                    "What is the topic of the passage?",
+                    1,
+                    [
+                        "The effects of good education",
+                        "Dressing for success",
+                        "The views of successful people",
+                        "The impact of intelligence",
+                        "Sources of success"
+                    ],
+                    "Sources of success",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "What do the 'internal or inside' factors mean?",
+                    1,
+                    [
+                        "Wearing make-up",
+                        "The world around us",
+                        "Family background",
+                        "Things people cannot see",
+                        "Things people can see"
+                    ],
+                    "Things people cannot see",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "Which statement agrees with the general information in the text?",
+                    1,
+                    [
+                        "Parents are fully responsible for their offspring's career success.",
+                        "Children often follow the career choice of parents.",
+                        "The internal, external and appearance factors lead to success.",
+                        "Pursuing promotion needs a good team support.",
+                        "Successful career is only based on academic achievement."
+                    ],
+                    "The internal, external and appearance factors lead to success.",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "Which people can become successful? People who",
+                    1,
+                    [
+                        "spend more than a third of their time in passive leisure",
+                        "have well-educated families",
+                        "have legal careers",
+                        "spend less than a fifth of their time relaxing",
+                        "share the views of successful people"
+                    ],
+                    "spend less than a fifth of their time relaxing",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "According to the Harvard University research, which of the following group has better social connection?",
+                    3,
+                    [
+                        "less advantaged students",
+                        "hard workers",
+                        "people with attractive appearance",
+                        "people with trustable look and smile",
+                        "taller men with lower-pitched voices"
+                    ],
+                    "taller men with lower-pitched voices",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "Which statement describes the author's opinion?",
+                    3,
+                    [
+                        "Making impression on others can be valuable in career.",
+                        "Being talented can make people high achievers.",
+                        "Hard work may lead to high success.",
+                        "Attractive psychical appearance can be rewarding.",
+                        "Family background tend to determine future profession."
+                    ],
+                    "Making impression on others can be valuable in career.",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "Riding bicycle: When someone rides a bicycle, he/she should move it pushing its _____ with his/her _____",
+                    1,
+                    [
+                        "tyres / fingers",
+                        "helmet / hands",
+                        "pedals / feet",
+                        "brakes / feet",
+                        "pedals / hands"
+                    ],
+                    "pedals / feet",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "When you exercise, you move your body energetically in order to _____ and remain healthy.",
+                    1,
+                    [
+                        "get sober",
+                        "get fit",
+                        "push up",
+                        "sit back",
+                        "run slowly"
+                    ],
+                    "get fit",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "Playing cards: To give cards to each person who is playing the game is to deal them. What would you say to know who is the dealer?",
+                    3,
+                    [
+                        "Cut the cards to see who starts.",
+                        "You can't do, it's cheating.",
+                        "It's my turn to start the game.",
+                        "Whose turn is it to give the cards out?",
+                        "You have a really good hand."
+                    ],
+                    "Whose turn is it to give the cards out?",
+                    null
+                ]
+            ]
+        },
+        {
+            "section_name": "PART 2",
+            "questions": [
+                [
+                    "MULTIPLE_CHOICE",
+                    "She (a) visits a nearby village to order food",
+                    1,
+                    [
+                        "occasional",
+                        "occasion",
+                        "occasionally",
+                        "occasioned",
+                        "occasioning"
+                    ],
+                    "occasionally",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "She must have been very (b) when she was young",
+                    1,
+                    [
+                        "attraction",
+                        "attractive",
+                        "attract",
+                        "attractively",
+                        "attracting"
+                    ],
+                    "attractive",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "her clothes were probably (c) 50 years ago",
+                    1,
+                    [
+                        "Fashioned",
+                        "fashion",
+                        "fashionably",
+                        "fashionable",
+                        "old-fashioned"
+                    ],
+                    "fashionable",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "She gives the (d) from the way she behaves",
+                    1,
+                    [
+                        "impression",
+                        "impressed",
+                        "impressive",
+                        "impressionist",
+                        "impressionable"
+                    ],
+                    "impression",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "she must have been an (e) once",
+                    1,
+                    [
+                        "acted",
+                        "acting",
+                        "actor",
+                        "act",
+                        "actress"
+                    ],
+                    "actress",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "they are (f) to find out unless she tells them",
+                    1,
+                    [
+                        "like",
+                        "likely",
+                        "liked",
+                        "likeable",
+                        "dislike"
+                    ],
+                    "likely",
+                    null
+                ],
+                [
+                    "MATCHING",
+                    "Match the words with their synonyms:",
+                    1,
+                    [],
+                    "{\"items\": {\"left\": [\"to grow up\", \"intelligent\", \"to reveal\", \"to empower\", \"spacious\", \"rude\", \"to represent\", \"to repent\"], \"right\": [\"I regret letting him go out late night.\", \"Everyone has entitled to their own opinion.\", \"The officer refused to disclose the report of the investigation.\", \"Van Gogh illustrated still life in vivid movement.\", \"He's matured since he left home.\", \"He thinks he is smarter than Sarah is.\", \"The car has a surprisingly roomy saloon.\", \"The programme contains language which some viewers find offensive.\"]}, \"mapping\": {\"k0\": \"4\", \"k1\": \"5\", \"k2\": \"2\", \"k3\": \"1\", \"k4\": \"6\", \"k5\": \"7\", \"k6\": \"3\", \"k7\": \"0\"}}",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "The (a) of one of America's favourite sports",
+                    1,
+                    [
+                        "basics",
+                        "conception",
+                        "starts",
+                        "inception",
+                        "origins"
+                    ],
+                    "origins",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "basketball was (b) by James Naismith in 1891",
+                    1,
+                    [
+                        "designed",
+                        "fabricated",
+                        "created",
+                        "fashioned",
+                        "produced"
+                    ],
+                    "created",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "the players from each (c) need to try to",
+                    1,
+                    [
+                        "side",
+                        "half",
+                        "set",
+                        "part",
+                        "form"
+                    ],
+                    "side",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "try to (d) points by putting a large bouncy ball",
+                    1,
+                    [
+                        "record",
+                        "score",
+                        "mark",
+                        "acquire",
+                        "obtain"
+                    ],
+                    "score",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "It is clear that (e) is an advantage",
+                    1,
+                    [
+                        "length",
+                        "width",
+                        "weight",
+                        "height",
+                        "building"
+                    ],
+                    "height",
+                    null
+                ],
+                [
+                    "MULTIPLE_CHOICE",
+                    "essential to become a(n) (f) basketball player",
+                    1,
+                    [
+                        "inept",
+                        "accessible",
+                        "able",
+                        "incompetent",
+                        "valuable"
+                    ],
+                    "able",
+                    null
+                ]
+            ]
+        }
+    ]
+}

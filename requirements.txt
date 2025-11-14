@@ -1,0 +1,16 @@
+python-dotenv==1.0.1
+requests==2.32.3
+fastapi==0.115.12
+prisma==0.15.0
+langchain-cli==0.0.36
+aiohttp==3.11.14
+PyJWT==2.10.1
+pydantic==2.10.6
+google-cloud-secret-manager==2.23.1
+cryptography==44.0.2
+aio-pika==9.5.5
+openai==1.70.0
+backoff==2.2.1
+pydantic-settings==2.8.1
+google-cloud-tasks==2.19.2
+aiolimiter==1.2.1

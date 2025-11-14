@@ -1,0 +1,1128 @@
+generator py {
+  provider                    = "prisma-client-py"
+  recursive_type_depth        = -1
+  enable_experimental_decimal = true
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int      @id(map: "PK_user_id") @default(autoincrement())
+  auth0_id    String   @unique @db.VarChar(255)
+  phone       String?   @unique @db.VarChar(255)
+  email       String   @unique @db.VarChar(255)
+  type        UserType @default(STUDENT)
+  full_name   String   @db.VarChar(255)
+  picture     String?  @db.VarChar(255)
+  bio         String?  @db.Text
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+  updated_at  DateTime @default(now()) @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+  login_count Int      @default(0)
+
+  // School relationships
+  school_class       SchoolClass?        @relation(fields: [school_class_id], references: [id])
+  school_class_id    String?
+
+  // Course relationships
+  enrollments        Enrollment[]
+  course_progress    CourseProgress[]
+  instructor_courses Course[] @relation("CourseInstructor")
+  created_courses    Course[] @relation("CourseCreator")
+
+  // Assessment relationships
+  test_attempts      TestAttempt[]
+  assignment_submissions AssignmentSubmission[]
+
+  // IELTS relation
+  ielts_test_attempts      IeltsTestAttempt[] @relation("IeltsTestAttempts")
+
+  // Discussion relationships
+  forum_posts        ForumPost[]
+  forum_replies      ForumReply[]
+
+  // Certificate relationships
+  certificates       Certificate[]
+
+  // Course reviews relationship
+  course_reviews     CourseReview[]
+
+  @@map("t_user")
+}
+
+model Employee {
+  id          Int      @id(map: "PK_employee_id") @default(autoincrement())
+  auth0_id    String           @unique 
+
+  full_name   String           @db.VarChar(255)
+  email       String           @unique
+  
+  type        UserType         @default(ADMIN)
+
+  attendance_events AttendanceEvent[]
+
+  is_deleted  Boolean          @default(false)
+  created_at  DateTime         @default(now())
+  updated_at  DateTime         @updatedAt
+
+  @@index([type])
+}
+
+enum AttendanceType {
+  CHECK_IN
+  CHECK_OUT
+}
+
+model AttendanceEvent {
+  id                  String   @id @default(cuid())
+  employee_id         Int
+  event_type          String   // CHECK_IN, CHECK_OUT
+  event_time          DateTime @default(now())
+  latitude            Float 
+  longitude           Float   
+  distance_from_office Float
+  device_info         String?  // New optional field
+  is_deleted          Boolean  @default(false)
+  
+  employee Employee @relation(fields: [employee_id], references: [id])
+  
+  @@map("attendance_events")
+}
+
+enum UserType {
+  STUDENT
+  INSTRUCTOR
+  ADMIN
+  TEACHING_ASSISTANT
+}
+
+// ========== ORGANIZATION STRUCTURE ==========
+model School {
+  id      String  @id @default(uuid())
+  name    String
+  address String?
+  logo    String?
+
+  school_classes SchoolClass[]
+  @@map("t_school")
+}
+
+model SchoolClass {
+  id        String @id @default(uuid())
+  name      String
+  school    School @relation(fields: [school_id], references: [id])
+  school_id String
+
+  users User[]
+
+  @@map("t_school_class")
+}
+
+// ========== COURSE MANAGEMENT ==========
+model Course {
+  id              String       @id @default(uuid())
+  title           String
+  short_title     String?      // For display in lists
+  description     String?      @db.Text
+  overview        String?      @db.Text
+  learning_objectives String?  @db.Text
+  prerequisites   String?      @db.Text
+  difficulty_level DifficultyLevel @default(BEGINNER)
+  estimated_duration Int?      // in hours
+  language        String       @default("en")
+  category        String?
+  subcategory     String?
+  thumbnail_url   String?
+  video_preview_url String?
+  price           Decimal?     @db.Money
+  is_free         Boolean      @default(false)
+  is_published    Boolean      @default(false)
+  is_featured     Boolean      @default(false)
+  rating          Float?       @default(0)
+  rating_count    Int          @default(0)
+  enrollment_count Int         @default(0)
+  created_at      DateTime     @default(now())
+  updated_at      DateTime     @updatedAt
+
+  // Relationships
+  instructor      User         @relation("CourseInstructor", fields: [instructor_id], references: [auth0_id])
+  instructor_id   String
+  creator         User         @relation("CourseCreator", fields: [creator_id], references: [auth0_id])
+  creator_id      String
+
+  modules         Module[]
+  enrollments     Enrollment[]
+  course_progress CourseProgress[]
+  announcements   Announcement[]
+  forums          Forum[]
+  assignments     Assignment[]
+  certificates    Certificate[]
+  reviews         CourseReview[]
+
+  @@map("t_course")
+}
+
+enum DifficultyLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+model Module {
+  id          String   @id @default(uuid())
+  title       String
+  description String?  @db.Text
+  order       Int
+  is_published Boolean @default(true)
+  estimated_duration Int? // in minutes
+
+  course      Course   @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  course_id   String
+
+  lessons     Lesson[]
+  module_progress ModuleProgress[]
+
+  @@map("t_module")
+}
+
+model Lesson {
+  id          String     @id @default(uuid())
+  title       String
+  description String?    @db.Text
+  content     String?    @db.Text // For text-based lessons
+  video_url   String?
+  video_duration Int?    // in seconds
+  order       Int
+  lesson_type LessonType @default(VIDEO)
+  is_published Boolean   @default(true)
+  is_preview  Boolean    @default(false) // Can be accessed without enrollment
+
+  module      Module     @relation(fields: [module_id], references: [id], onDelete: Cascade)
+  module_id   String
+
+  resources   LessonResource[]
+  lesson_progress LessonProgress[]
+
+  @@map("t_lesson")
+}
+
+enum LessonType {
+  VIDEO
+  TEXT
+  QUIZ
+  ASSIGNMENT
+  READING
+  INTERACTIVE
+}
+
+model LessonResource {
+  id          String @id @default(uuid())
+  title       String
+  description String?
+  file_url    String
+  file_type   String // pdf, doc, zip, etc.
+  file_size   Int?   // in bytes
+
+  lesson      Lesson @relation(fields: [lesson_id], references: [id], onDelete: Cascade)
+  lesson_id   String
+
+  @@map("t_lesson_resource")
+}
+
+// ========== ENROLLMENT & PROGRESS TRACKING ==========
+model Enrollment {
+  id              String           @id @default(uuid())
+  status          EnrollmentStatus @default(ACTIVE)
+  enrolled_at     DateTime         @default(now())
+  completed_at    DateTime?
+  last_accessed_at DateTime?
+  progress_percentage Float        @default(0)
+
+  user            User             @relation(fields: [user_id], references: [auth0_id])
+  user_id         String
+  course          Course           @relation(fields: [course_id], references: [id])
+  course_id       String
+
+  @@unique([user_id, course_id])
+  @@map("t_enrollment")
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  DROPPED
+  SUSPENDED
+}
+
+model CourseProgress {
+  id                  String   @id @default(uuid())
+  progress_percentage Float    @default(0)
+  time_spent          Int      @default(0) // in seconds
+  last_accessed_at    DateTime @default(now())
+
+  user                User     @relation(fields: [user_id], references: [auth0_id])
+  user_id             String
+  course              Course   @relation(fields: [course_id], references: [id])
+  course_id           String
+
+  // One-to-many relationship with module progress
+  module_progress     ModuleProgress[]
+
+  @@unique([user_id, course_id])
+  @@map("t_course_progress")
+}
+
+model ModuleProgress {
+  id               String   @id @default(uuid())
+  is_completed     Boolean  @default(false)
+  completed_at     DateTime?
+  time_spent       Int      @default(0) // in seconds
+  progress_percentage Float @default(0)
+
+  // Hierarchical relationship - belongs to course progress
+  course_progress  CourseProgress @relation(fields: [course_progress_id], references: [id])
+  course_progress_id String
+
+  module           Module   @relation(fields: [module_id], references: [id])
+  module_id        String
+
+  // One-to-many relationship with lesson progress
+  lesson_progress  LessonProgress[]
+
+  @@unique([course_progress_id, module_id])
+  @@map("t_module_progress")
+}
+
+model LessonProgress {
+  id               String   @id @default(uuid())
+  is_completed     Boolean  @default(false)
+  completed_at     DateTime?
+  time_spent       Int      @default(0) // in seconds
+  watch_time       Int      @default(0) // for video lessons, in seconds
+
+  // Hierarchical relationship - belongs to module progress
+  module_progress  ModuleProgress @relation(fields: [module_progress_id], references: [id])
+  module_progress_id String
+
+  lesson           Lesson   @relation(fields: [lesson_id], references: [id])
+  lesson_id        String
+
+  @@unique([module_progress_id, lesson_id])
+  @@map("t_lesson_progress")
+}
+
+// ========== ASSESSMENTS & TESTING (Your existing models with enhancements) ==========
+enum QuestionType {
+  MULTIPLE_CHOICE
+  FILL_IN_THE_BLANK
+  SHORT_ANSWER
+  ESSAY
+  TRUE_FALSE
+  MATCHING
+  COLLOCATION_FORK
+  NUMERIC_ANSWER
+  FREE_RESPONSE
+}
+
+enum TestSubject {
+  MATH
+  ENGLISH
+}
+
+model Test {
+  id           String        @id @default(uuid())
+  duration     Int // Duration in minutes
+  subject      TestSubject
+  title        String
+  description  String? // e.g., "2023 English - Version A" or "2023 Math - Version A"
+  instructions String? // Overall instructions (e.g., "Read carefully. This test has 2 parts.")
+  sections     Section[] // A test can have multiple sections
+  is_active    Boolean @default(true) // Is the test currently active?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  TestAttempt  TestAttempt[]
+
+  @@map("t_test")
+}
+
+model Section {
+  id           String     @id @default(uuid())
+  name         String // e.g., "GRAMMAR", "READING", "Нэгдүгээр хэсэг", "Хоёрдугаар хэсэг"
+  instructions String? // Section‐level instructions
+  order        Int // Determines the order of the sections
+  // Relationship to the parent Test:
+  test         Test       @relation(fields: [testId], references: [id])
+  testId       String
+  // Optionally, a section can be subdivided into tasks (e.g., reading tasks, multi‐part math tasks):
+  tasks        Task[]
+  questions    Question[]
+
+  @@map("t_section")
+}
+
+model Task {
+  id           String     @id @default(uuid())
+  title        String? // e.g., "Task 1: Reading Passage" or "2.1 Parabola Task"
+  instructions String? // Task‐level instructions
+  passage      String? // If needed, store a large text passage (reading or problem statement)
+  order        Int
+  section      Section    @relation(fields: [sectionId], references: [id])
+  sectionId    String
+  questions    Question[]
+
+
+  @@map("t_task")
+}
+
+model Question {
+  id             String       @id @default(uuid())
+  questionNumber String?
+  text           String
+  points         Int
+  type           QuestionType
+  category       String?
+  section        Section?     @relation(fields: [sectionId], references: [id])
+  sectionId      String?
+  task           Task?        @relation(fields: [taskId], references: [id])
+  taskId         String?
+  options        Option[] // Used for multiple-choice questions only.
+
+  // For numeric or formula-based questions:
+  correctNumericAnswer Float?
+  correctFormulaLatex  String?
+
+  // For matching questions:
+  matchingItems  Json? // E.g.: { "left": [ ... ], "right": [ ... ] }
+  correctMapping Json? // E.g.: { "0": "2", "1": "0", ... }  
+  // Maps indices from left to right
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  Response  Response[]
+
+
+  @@map("t_question")
+}
+
+model Option {
+  id         String   @id @default(uuid())
+  label      String // e.g., "A", "B", "C", "1", "2", etc.
+  text       String // The option text (can include LaTeX for math)
+  order      Int // Position or ordering
+  is_correct Boolean  @default(false) // Is this option correct?
+  // Link back to the parent Question:
+  question   Question @relation(fields: [questionId], references: [id])
+  questionId String
+
+  @@map("t_option")
+}
+
+enum TestAttemptStatus {
+  CANCELED_BY_SYSTEM
+  IN_PROGRESS
+  SUBMITTED
+  GRADED
+}
+
+model TestAttempt {
+  id String @id @default(uuid())
+
+  user    User   @relation(fields: [user_id], references: [auth0_id])
+  user_id String
+
+  test    Test   @relation(fields: [test_id], references: [id])
+  test_id String
+
+  status TestAttemptStatus @default(IN_PROGRESS) // Status of the attempt
+
+  started_at   DateTime   @default(now())
+  submitted_at DateTime? // Filled when the test is submitted by the user
+  due_at     DateTime? // Optional: to store the due date for the test
+  report      String?      // ← New optional field for your “report”
+  score        Float? // Optional: to store the final score if grading is done on submission
+  responses    Response[]
+
+  finish_id String? // Optional: to store the ID of the test finish event
+   @@map("t_test_attempt")
+ }
+
+
+model Response {
+  id          String      @id @default(uuid())
+  attempt     TestAttempt @relation(fields: [attempt_id], references: [id])
+  attempt_id  String
+  question    Question    @relation(fields: [question_id], references: [id])
+  question_id String
+
+  // General response fields:
+  answer_text     String? // For free text responses (short answer, essay, etc.)
+  numeric_answer  Float? // For numeric or formula-based answers
+  selected_option String? // For multiple-choice: store the selected Option's id (or a CSV string if multiple answers are allowed)
+
+  // For more complex question types (e.g., matching, colocation), you could use JSON:
+  additional_data Json? // Useful for storing answers that are more complex (e.g., matching mappings)
+
+  // Optional fields that you might calculate after grading:
+  is_correct     Boolean? // True if the response is correct (for auto-graded questions)
+  points_awarded Int? // The points awarded for this response
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("t_response")
+}
+
+// ========== ASSIGNMENTS ==========
+model Assignment {
+  id           String     @id @default(uuid())
+  title        String
+  description  String     @db.Text
+  instructions String?    @db.Text
+  due_date     DateTime?
+  points       Int        @default(100)
+  is_published Boolean    @default(false)
+  created_at   DateTime   @default(now())
+  updated_at   DateTime   @updatedAt
+
+  course       Course     @relation(fields: [course_id], references: [id])
+  course_id    String
+
+  submissions  AssignmentSubmission[]
+
+  @@map("t_assignment")
+}
+
+model AssignmentSubmission {
+  id              String              @id @default(uuid())
+  submission_text String?             @db.Text
+  file_urls       String[]            // Array of file URLs
+  submitted_at    DateTime            @default(now())
+  status          SubmissionStatus    @default(SUBMITTED)
+  grade           Float?
+  feedback        String?             @db.Text
+  graded_at       DateTime?
+
+  user            User                @relation(fields: [user_id], references: [auth0_id])
+  user_id         String
+  assignment      Assignment          @relation(fields: [assignment_id], references: [id])
+  assignment_id   String
+
+  @@unique([user_id, assignment_id])
+  @@map("t_assignment_submission")
+}
+
+enum SubmissionStatus {
+  SUBMITTED
+  GRADED
+  RETURNED
+}
+
+// ========== DISCUSSION FORUMS ==========
+model Forum {
+  id          String      @id @default(uuid())
+  title       String
+  description String?     @db.Text
+  is_active   Boolean     @default(true)
+  created_at  DateTime    @default(now())
+
+  course      Course      @relation(fields: [course_id], references: [id])
+  course_id   String
+
+  posts       ForumPost[]
+
+  @@map("t_forum")
+}
+
+model ForumPost {
+  id          String       @id @default(uuid())
+  title       String
+  content     String       @db.Text
+  is_pinned   Boolean      @default(false)
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @updatedAt
+
+  author      User         @relation(fields: [author_id], references: [auth0_id])
+  author_id   String
+  forum       Forum        @relation(fields: [forum_id], references: [id])
+  forum_id    String
+
+  replies     ForumReply[]
+
+  @@map("t_forum_post")
+}
+
+model ForumReply {
+  id          String     @id @default(uuid())
+  content     String     @db.Text
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
+
+  author      User       @relation(fields: [author_id], references: [auth0_id])
+  author_id   String
+  post        ForumPost  @relation(fields: [post_id], references: [id])
+  post_id     String
+
+  @@map("t_forum_reply")
+}
+
+// ========== ANNOUNCEMENTS ==========
+model Announcement {
+  id          String   @id @default(uuid())
+  title       String
+  content     String   @db.Text
+  is_important Boolean @default(false)
+  created_at  DateTime @default(now())
+
+  course      Course   @relation(fields: [course_id], references: [id])
+  course_id   String
+
+  @@map("t_announcement")
+}
+
+// ========== CERTIFICATES ==========
+model Certificate {
+  id              String   @id @default(uuid())
+  certificate_url String
+  issued_at       DateTime @default(now())
+  is_valid        Boolean  @default(true)
+
+  user            User     @relation(fields: [user_id], references: [auth0_id])
+  user_id         String
+  course          Course   @relation(fields: [course_id], references: [id])
+  course_id       String
+
+  @@unique([user_id, course_id])
+  @@map("t_certificate")
+}
+
+// ========== REVIEWS & RATINGS ==========
+model CourseReview {
+  id          String   @id @default(uuid())
+  rating      Int      // 1-5 stars
+  review_text String?  @db.Text
+  created_at  DateTime @default(now())
+
+  user        User     @relation(fields: [user_id], references: [auth0_id])
+  user_id     String
+  course      Course   @relation(fields: [course_id], references: [id])
+  course_id   String
+
+  @@unique([user_id, course_id])
+  @@map("t_course_review")
+}
+
+// ========== IELTS-SPECIFIC ENUMS ==========
+enum IeltsModule {
+  LISTENING
+  READING  
+  WRITING
+  SPEAKING
+}
+
+enum IeltsQuestionType {
+  // Listening Question Types
+  MULTIPLE_CHOICE
+  MATCHING
+  PLAN_MAP_DIAGRAM_LABELLING
+  FORM_NOTE_TABLE_FLOW_CHART_SUMMARY_COMPLETION
+  SENTENCE_COMPLETION
+  SHORT_ANSWER_QUESTIONS
+  
+  // Reading Question Types  
+  MULTIPLE_CHOICE_READING
+  IDENTIFYING_INFORMATION // True/False/Not Given
+  IDENTIFYING_WRITERS_VIEWS // Yes/No/Not Given
+  MATCHING_INFORMATION
+  MATCHING_HEADINGS
+  MATCHING_FEATURES
+  MATCHING_SENTENCE_ENDINGS
+  SENTENCE_COMPLETION_READING
+  SUMMARY_NOTE_TABLE_FLOW_CHART_COMPLETION
+  DIAGRAM_LABEL_COMPLETION
+  SHORT_ANSWER_QUESTIONS_READING
+  
+  // Writing Question Types
+  TASK_1_ACADEMIC // Describe visual information
+  TASK_1_GENERAL // Write a letter
+  TASK_2 // Essay writing
+  
+  // Speaking Question Types
+  PART_1 // Introduction and interview
+  PART_2 // Long turn (cue card)
+  PART_3 // Discussion
+}
+
+enum IeltsTestStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+  INACTIVE
+}
+
+enum IeltsAttemptStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  LISTENING_COMPLETED
+  READING_COMPLETED
+  WRITING_COMPLETED
+  SPEAKING_SCHEDULED
+  SPEAKING_IN_PROGRESS
+  SPEAKING_COMPLETED
+  FULLY_COMPLETED
+  GRADED
+  EXPIRED
+  CANCELLED
+}
+
+enum SpeakingSessionStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+// ========== IELTS TEST STRUCTURE ==========
+model IeltsTest {
+  id               String        @id @default(uuid())
+  title            String        // e.g., "IELTS Practice Test #1"
+  description      String?       @db.Text
+  status           IeltsTestStatus @default(DRAFT)
+  duration_minutes Int           @default(180) // Total test duration
+  is_practice      Boolean       @default(true) // Practice vs Official
+  version          String?       // Test version identifier
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @updatedAt
+  published_at     DateTime?
+  
+  // Test Components
+  listening_test   IeltsListeningTest?
+  reading_test     IeltsReadingTest?
+  writing_test     IeltsWritingTest?
+  speaking_test    IeltsSpeakingTest?
+  
+  // Test Attempts
+  attempts         IeltsTestAttempt[]
+  
+  // Optional: Link to course if part of a course
+
+  @@map("t_ielts_test")
+}
+
+// ========== LISTENING TEST ==========
+model IeltsListeningTest {
+  id               String     @id @default(uuid())
+  duration_minutes Int        @default(40) // 30 min listening + 10 min transfer
+  instructions     String?    @db.Text
+  audio_url        String?
+  
+  test             IeltsTest  @relation(fields: [test_id], references: [id], onDelete: Cascade)
+  test_id          String     @unique
+  
+  sections         IeltsListeningSection[]
+  
+  @@map("t_ielts_listening_test")
+}
+
+model IeltsListeningSection {
+  id               String              @id @default(uuid())
+  section_number   Int                 // 1, 2, 3, 4
+  title            String              // e.g., "Section 1"
+  context          String?             @db.Text // Description of the situation
+  audio_url        String?             // Section-specific audio
+  audio_start_time Int?                // Start time in seconds
+  audio_end_time   Int?                // End time in seconds
+  instructions     String?             @db.Text
+  
+  listening_test   IeltsListeningTest  @relation(fields: [listening_test_id], references: [id], onDelete: Cascade)
+  listening_test_id String
+  
+  questions        IeltsListeningQuestion[]
+  
+  @@map("t_ielts_listening_section")
+}
+
+model IeltsListeningQuestion {
+  id               String                  @id @default(uuid())
+  question_number  Int                     // 1-40
+  question_text    String?                 @db.Text
+  question_type    IeltsQuestionType
+  points           Float                   @default(1.0)
+  audio_start_time Int?                    // When this question starts in audio
+  audio_end_time   Int?                    // When this question ends in audio
+  
+  section          IeltsListeningSection   @relation(fields: [section_id], references: [id], onDelete: Cascade)
+  section_id       String
+  
+  // Answer data
+  correct_answer   String?                 // For short answers, completion, etc.
+  options          IeltsListeningOption[]  // For multiple choice
+  matching_pairs   Json?                   // For matching questions
+  additional_data  Json?                   // For complex question types
+  
+  responses        IeltsListeningResponse[]
+  
+  @@map("t_ielts_listening_question")
+}
+
+model IeltsListeningOption {
+  id          String                  @id @default(uuid())
+  label       String                  // A, B, C, etc.
+  text        String                  @db.Text
+  is_correct  Boolean                 @default(false)
+  order       Int
+  
+  question    IeltsListeningQuestion  @relation(fields: [question_id], references: [id], onDelete: Cascade)
+  question_id String
+  
+  @@map("t_ielts_listening_option")
+}
+
+// ========== READING TEST ==========
+model IeltsReadingTest {
+  id               String     @id @default(uuid())
+  duration_minutes Int        @default(60)
+  instructions     String?    @db.Text
+  
+  test             IeltsTest  @relation(fields: [test_id], references: [id], onDelete: Cascade)
+  test_id          String     @unique
+  
+  passages         IeltsReadingPassage[]
+  
+  @@map("t_ielts_reading_test")
+}
+
+model IeltsReadingPassage {
+  id               String             @id @default(uuid())
+  passage_number   Int                // 1, 2, 3
+  title            String
+  content          String             @db.Text // The reading passage
+  word_count       Int?
+  source           String?            // Source attribution
+  
+  reading_test     IeltsReadingTest   @relation(fields: [reading_test_id], references: [id], onDelete: Cascade)
+  reading_test_id  String
+  
+  questions        IeltsReadingQuestion[]
+  
+  @@map("t_ielts_reading_passage")
+}
+
+model IeltsReadingQuestion {
+  id               String                @id @default(uuid())
+  question_number  Int                   // 1-40
+  question_text    String?               @db.Text
+  question_type    IeltsQuestionType
+  points           Float                 @default(1.0)
+  instructions     String?               @db.Text // Question-specific instructions
+  
+  passage          IeltsReadingPassage   @relation(fields: [passage_id], references: [id], onDelete: Cascade)
+  passage_id       String
+  
+  // Answer data
+  correct_answer   String?               // For short answers, True/False, etc.
+  options          IeltsReadingOption[]  // For multiple choice
+  matching_data    Json?                 // For matching questions
+  additional_data  Json?                 // For complex question types
+  
+  responses        IeltsReadingResponse[]
+  
+  @@map("t_ielts_reading_question")
+}
+
+model IeltsReadingOption {
+  id          String                @id @default(uuid())
+  label       String                // A, B, C, etc.
+  text        String                @db.Text
+  is_correct  Boolean               @default(false)
+  order       Int
+  
+  question    IeltsReadingQuestion  @relation(fields: [question_id], references: [id], onDelete: Cascade)
+  question_id String
+  
+  @@map("t_ielts_reading_option")
+}
+
+// ========== WRITING TEST ==========
+model IeltsWritingTest {
+  id               String     @id @default(uuid())
+  duration_minutes Int        @default(60)
+  instructions     String?    @db.Text
+  
+  test             IeltsTest  @relation(fields: [test_id], references: [id], onDelete: Cascade)
+  test_id          String     @unique
+  
+  tasks            IeltsWritingTask[]
+  
+  @@map("t_ielts_writing_test")
+}
+
+model IeltsWritingTask {
+  id               String            @id @default(uuid())
+  task_number      Int               // 1 or 2
+  task_type        IeltsQuestionType // TASK_1_ACADEMIC, TASK_1_GENERAL, TASK_2
+  title            String
+  prompt           String            @db.Text // The writing prompt
+  min_words        Int               @default(150) // Task 1: 150, Task 2: 250
+  suggested_time   Int               // in minutes (Task 1: 20, Task 2: 40)
+  visual_content   String?           // URL to charts, graphs, diagrams for Task 1
+  
+  writing_test     IeltsWritingTest  @relation(fields: [writing_test_id], references: [id], onDelete: Cascade)
+  writing_test_id  String
+  
+  responses        IeltsWritingResponse[]
+  
+  @@map("t_ielts_writing_task")
+}
+
+// ========== SPEAKING TEST ==========
+model IeltsSpeakingTest {
+  id               String     @id @default(uuid())
+  duration_minutes Int        @default(15) // 11-14 minutes typically
+  instructions     String?    @db.Text
+  
+  test             IeltsTest  @relation(fields: [test_id], references: [id], onDelete: Cascade)
+  test_id          String     @unique
+  
+  parts            IeltsSpeakingPart[]
+  
+  @@map("t_ielts_speaking_test")
+}
+
+model IeltsSpeakingPart {
+  id               String             @id @default(uuid())
+  part_number      Int                // 1, 2, 3
+  title            String             // e.g., "Part 1: Introduction and Interview"
+  duration_minutes Int                // Part 1: 4-5 min, Part 2: 3-4 min, Part 3: 4-5 min
+  instructions     String?            @db.Text
+  
+  speaking_test    IeltsSpeakingTest  @relation(fields: [speaking_test_id], references: [id], onDelete: Cascade)
+  speaking_test_id String
+  
+  questions        IeltsSpeakingQuestion[]
+  
+  @@map("t_ielts_speaking_part")
+}
+
+model IeltsSpeakingQuestion {
+  id               String                  @id @default(uuid())
+  question_text    String                  @db.Text
+  question_type    IeltsQuestionType      // PART_1, PART_2, PART_3
+  preparation_time Int?                   // seconds (Part 2: 60 seconds)
+  speaking_time    Int?                   // seconds (Part 2: 120 seconds)
+  cue_card         String?                @db.Text // For Part 2 cue cards
+  follow_up_notes  String?                @db.Text // Additional prompts
+  
+  part             IeltsSpeakingPart      @relation(fields: [part_id], references: [id], onDelete: Cascade)
+  part_id          String
+  
+  responses        IeltsSpeakingResponse[]
+  
+  @@map("t_ielts_speaking_question")
+}
+
+// ========== TEST ATTEMPTS ==========
+model IeltsTestAttempt {
+  id                    String             @id @default(uuid())
+  attempt_number        Int                @default(1)
+  status                IeltsAttemptStatus @default(NOT_STARTED)
+  
+  // Timestamps
+  started_at            DateTime           @default(now())
+  listening_completed_at DateTime?
+  reading_completed_at   DateTime?
+  writing_completed_at   DateTime?
+  speaking_completed_at  DateTime?
+  submitted_at          DateTime?
+  expires_at            DateTime?          // Test expiry time
+  
+  // Scores
+  listening_score       Float?             // Raw score (e.g., 23/40)
+  reading_score         Float?             // Raw score (e.g., 30/40)
+  writing_score         Float?             // Band score (e.g., 6.5)
+  speaking_score        Float?             // Band score (e.g., 7.0)
+  
+  // Band Scores
+  listening_band        Float?             // 0-9 band score
+  reading_band          Float?             // 0-9 band score
+  writing_band          Float?             // 0-9 band score
+  speaking_band         Float?             // 0-9 band score
+  overall_band          Float?             // Average band score
+  
+  // Additional data
+  time_spent_seconds    Int                @default(0)
+  grading_notes         String?            @db.Text
+  feedback              String?            @db.Text
+  
+  // Relationships
+  user                  User               @relation("IeltsTestAttempts", fields: [user_id], references: [auth0_id])
+  user_id               String
+  test                  IeltsTest          @relation(fields: [test_id], references: [id])
+  test_id               String
+  
+  // Response relationships
+  listening_responses   IeltsListeningResponse[]
+  reading_responses     IeltsReadingResponse[]
+  writing_responses     IeltsWritingResponse[]
+  speaking_responses    IeltsSpeakingResponse[]
+  speaking_sessions     IeltsSpeakingSession[]
+  
+  @@map("t_ielts_test_attempt")
+}
+
+// ========== RESPONSE MODELS ==========
+model IeltsListeningResponse {
+  id          String                  @id @default(uuid())
+  answer      String?                 // User's answer
+  is_correct  Boolean?                // Calculated after grading
+  time_spent  Int?                    // seconds spent on this question
+  
+  attempt     IeltsTestAttempt        @relation(fields: [attempt_id], references: [id], onDelete: Cascade)
+  attempt_id  String
+  question    IeltsListeningQuestion  @relation(fields: [question_id], references: [id])
+  question_id String
+  
+  @@unique([attempt_id, question_id])
+  @@map("t_ielts_listening_response")
+}
+
+model IeltsReadingResponse {
+  id          String                @id @default(uuid())
+  answer      String?               // User's answer
+  is_correct  Boolean?              // Calculated after grading
+  time_spent  Int?                  // seconds spent on this question
+  
+  attempt     IeltsTestAttempt      @relation(fields: [attempt_id], references: [id], onDelete: Cascade)
+  attempt_id  String
+  question    IeltsReadingQuestion  @relation(fields: [question_id], references: [id])
+  question_id String
+  
+  @@unique([attempt_id, question_id])
+  @@map("t_ielts_reading_response")
+}
+
+model IeltsWritingResponse {
+  id            String            @id @default(uuid())
+  content       String            @db.Text // User's written response
+  word_count    Int?              // Calculated word count
+  time_spent    Int?              // seconds spent on this task
+  
+  // Grading criteria (each scored 0-9)
+  task_achievement    Float?      // Task 1: Task Achievement, Task 2: Task Response
+  coherence_cohesion  Float?      // Coherence and Cohesion
+  lexical_resource    Float?      // Lexical Resource
+  grammar_accuracy    Float?      // Grammatical Range and Accuracy
+  band_score          Float?      // Overall band score for this task
+  
+  grader_feedback     String?     @db.Text
+  graded_at          DateTime?
+  graded_by          String?     // Grader ID or "AI"
+  
+  attempt     IeltsTestAttempt    @relation(fields: [attempt_id], references: [id], onDelete: Cascade)
+  attempt_id  String
+  task        IeltsWritingTask    @relation(fields: [task_id], references: [id])
+  task_id     String
+  
+  @@unique([attempt_id, task_id])
+  @@map("t_ielts_writing_response")
+}
+
+model IeltsSpeakingResponse {
+  id              String                  @id @default(uuid())
+  audio_url       String?                 // Recording URL
+  transcript      String?                 @db.Text // Speech-to-text transcript
+  duration        Int?                    // seconds
+  
+  // Grading criteria (each scored 0-9)
+  fluency_coherence     Float?            // Fluency and Coherence
+  lexical_resource      Float?            // Lexical Resource
+  grammar_accuracy      Float?            // Grammatical Range and Accuracy
+  pronunciation         Float?            // Pronunciation
+  band_score           Float?             // Overall band score for this question
+  
+  grader_feedback      String?            @db.Text
+  graded_at           DateTime?
+  graded_by           String?             // Grader ID or "AI"
+  
+  attempt     IeltsTestAttempt        @relation(fields: [attempt_id], references: [id], onDelete: Cascade)
+  attempt_id  String
+  question    IeltsSpeakingQuestion   @relation(fields: [question_id], references: [id])
+  question_id String
+  
+  @@unique([attempt_id, question_id])
+  @@map("t_ielts_speaking_response")
+}
+
+// ========== SPEAKING SESSION MANAGEMENT ==========
+model IeltsSpeakingSession {
+  id                String                @id @default(uuid())
+  status            SpeakingSessionStatus @default(SCHEDULED)
+  scheduled_at      DateTime              // When the session is scheduled
+  started_at        DateTime?             // When actually started
+  completed_at      DateTime?             // When completed
+  duration_minutes  Int?                  // Actual duration
+  examiner_id       String?               // ID of human examiner (if applicable)
+  session_notes     String?               @db.Text
+  technical_issues  String?               @db.Text
+  
+  attempt           IeltsTestAttempt      @relation(fields: [attempt_id], references: [id])
+  attempt_id        String
+  
+  @@map("t_ielts_speaking_session")
+}
+
+// ========== BAND SCORE CONVERSION TABLES ==========
+model IeltsBandConversion {
+  id             String      @id @default(uuid())
+  module         IeltsModule
+  raw_score      Int         // Raw score (e.g., 23 out of 40)
+  band_score     Float       // Corresponding band score (e.g., 6.0)
+
+  @@unique([module, raw_score])
+  @@map("t_ielts_band_conversion")
+}
+
+// ========== EXTENDED EXISTING USER MODEL ==========
+// Add this to your existing User model relationships:
+// ielts_attempts IeltsTestAttempt[] @relation("IeltsTestAttempts")
+
+// ========== ADDITIONAL MODELS FOR IELTS FEATURES ==========
+model IeltsVocabulary {
+  id          String   @id @default(uuid())
+  word        String   @unique
+  definition  String   @db.Text
+  part_of_speech String?
+  example_sentence String? @db.Text
+  difficulty_level String? // beginner, intermediate, advanced
+  frequency   String?  // high, medium, low
+  created_at  DateTime @default(now())
+  
+  @@map("t_ielts_vocabulary")
+}
+
+model IeltsGrammarPoint {
+  id          String   @id @default(uuid())
+  title       String
+  description String   @db.Text
+  examples    Json     // Array of example sentences
+  difficulty_level String?
+  created_at  DateTime @default(now())
+  
+  @@map("t_ielts_grammar_point")
+}
+
+model IeltsStudyMaterial {
+  id          String      @id @default(uuid())
+  title       String
+  content     String      @db.Text
+  material_type String    // tip, strategy, guide, etc.
+  module      IeltsModule
+  difficulty_level String?
+  created_at  DateTime    @default(now())
+  
+  @@map("t_ielts_study_material")
+}
