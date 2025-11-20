@@ -15,7 +15,7 @@ async def health(auth_result: str = Security(auth.verify)):
     uptime = time.time() - start_time
     result = {
         "status": "OK",
-        "uptime": round(uptime, 2),
+        "uptime": round(uptime, 3),
         "date": datetime.now()
     }
     return result
