@@ -1,6 +1,8 @@
 from .secretenv import init_secrets
 from dotenv import load_dotenv
-
+import logging
+import os
+import sys
 init_secrets()
 load_dotenv()
 
@@ -35,11 +37,28 @@ from .routers.course import (
     reviews       # course reviews and ratings
 )
 
-
+sys.stdout.reconfigure(line_buffering=True)
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
+log.info("STARTUP: Initializing environment...")
+try:
+    # If this step hangs, set env var SKIP_SECRETS=true in Cloud Run
+    if os.getenv("SKIP_SECRETS", "false").lower() == "true":
+         log.warning("⚠️ DIAGNOSTIC MODE: Skipping Secret Loading.")
+    else:
+        from .secretenv import init_secrets
+        log.info("STARTUP: Calling init_secrets()...")
+        init_secrets()
+        log.info("STARTUP: init_secrets() finished.")
+    
+    load_dotenv()
+except Exception as e:
+    log.critical(f"CRITICAL: Failed to load environment secrets. Error: {e}")
+    # Exit cleanly so Cloud Run reports a crash, not a timeout
+    sys.exit(1)
 
+    
 @asynccontextmanager
 async def lifespan(app):
     try:
@@ -53,7 +72,7 @@ async def lifespan(app):
         await prisma.disconnect()
         log.info("FastAPI shutdown: Cleaning up resources...")
 
-    
+
     
 app = FastAPI(lifespan=lifespan)
 app.add_middleware(
@@ -93,8 +112,8 @@ app.include_router(enrollment.router)   # Course enrollment
 app.include_router(progress.router)     # Progress tracking
 app.include_router(reviews.router)      # Course reviews and ratings
 
-
 if __name__ == "__main__":
     import uvicorn
-
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    # Local development
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
